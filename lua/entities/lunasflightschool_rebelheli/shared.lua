@@ -6,7 +6,7 @@ DEFINE_BASECLASS( "lunasflightschool_basescript_heli" )
 ENT.PrintName = "Rebel Helicopter"
 ENT.Author = "Luna"
 ENT.Information = "Transport Helicopter as seen in Half Life 2 Episode 2"
-ENT.Category = "[LFS]"
+ENT.Category = "[LFS] - Helicopters"
 
 ENT.Spawnable		= true
 ENT.AdminSpawnable	= false

@@ -6,7 +6,7 @@ DEFINE_BASECLASS( "lunasflightschool_basescript_heli" )
 ENT.PrintName = "Combine Helicopter"
 ENT.Author = "Luna"
 ENT.Information = "Combine Attack Helicopter from Half Life 2 + Episodes"
-ENT.Category = "[LFS]"
+ENT.Category = "[LFS] - Helicopters"
 
 ENT.Spawnable		= true
 ENT.AdminSpawnable	= false

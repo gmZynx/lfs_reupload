@@ -6,7 +6,7 @@ DEFINE_BASECLASS( "lunasflightschool_basescript" )
 ENT.PrintName = "Spitfire"
 ENT.Author = "Luna"
 ENT.Information = "British World War 2 Fighterplane"
-ENT.Category = "[LFS]"
+ENT.Category = "[LFS] - Planes"
 
 ENT.Spawnable		= true
 ENT.AdminSpawnable		= false

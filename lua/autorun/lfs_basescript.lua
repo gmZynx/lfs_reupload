@@ -987,7 +987,7 @@ if CLIENT then
         if not IsValid( ent ) then return end
 
         local pSeats = ent:GetPassengerSeats()
-        local SeatCount = table.Count( pSeats )
+        local SeatCount = #pSeats + 1
 
         if SeatCount <= 0 then return end
 

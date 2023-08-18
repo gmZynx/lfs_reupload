@@ -38,7 +38,7 @@ function EFFECT:doFX( pos )
 		local emitter = self.Emitter
 
 		if self.Entity:GetDirtyMissile() then
-			local particle = emitter:Add( self.Materials[math.random(1, table.Count(self.Materials) )], pos )
+			local particle = emitter:Add( self.Materials[ math.random( 1, #self.Materials ) ], pos )
 			if particle then
 				particle:SetGravity( Vector(0,0,100) + VectorRand() * 50 ) 
 				particle:SetVelocity( -self.Entity:GetForward() * 500  )
@@ -81,7 +81,7 @@ function EFFECT:doFX( pos )
 			end
 		else
 			if not self.Entity:GetCleanMissile() then
-				local particle = emitter:Add( self.Materials[math.random(1, table.Count(self.Materials) )], pos )
+				local particle = emitter:Add( self.Materials[ math.Round( math.Rand( 1, #self.Materials ) ) ], pos )
 				
 				if particle then
 					particle:SetGravity( Vector(0,0,100) + VectorRand() * 50 ) 
@@ -121,7 +121,7 @@ function EFFECT:doFXbroken( pos )
 	if self.Emitter then
 		local emitter = self.Emitter
 
-		local particle = emitter:Add( self.Materials[math.random(1, table.Count(self.Materials) )], pos )
+		local particle = emitter:Add( self.Materials[ math.Round( math.Rand( 1, #self.Materials ) ) ], pos )
 		if particle then
 			particle:SetGravity( Vector(0,0,100) + VectorRand() * 50 ) 
 			particle:SetVelocity( -self.Entity:GetForward() * 500  )

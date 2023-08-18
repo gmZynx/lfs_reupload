@@ -62,7 +62,7 @@ function EFFECT:Init( data )
 	end
 	
 	for i = 0,20 do
-		local particle = emitter:Add( Materials[math.random(1,table.Count( Materials ))],self.StartPos )
+		local particle = emitter:Add( Materials[ math.random( 1, #Materials ) ],self.StartPos )
 		
 		local rCol = 255
 		

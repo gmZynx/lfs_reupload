@@ -25,7 +25,7 @@ function EFFECT:Init( data )
 	local emitter = ParticleEmitter( Pos, false )
 
 	if emitter then
-		local particle = emitter:Add( Materials[math.Round(math.Rand(1,table.Count( Materials )),0)], Pos )
+		local particle = emitter:Add( Materials[ math.Round( math.Rand( 1, #Materials ), 0 ) ], Pos )
 		
 		if particle then
 			particle:SetVelocity( VectorRand() * 100 )

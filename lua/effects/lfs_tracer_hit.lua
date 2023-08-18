@@ -55,7 +55,7 @@ function EFFECT:Spark( pos )
 	end
 	
 	for i = 0,20 do
-		local particle = emitter:Add( Materials[math.random(1,table.Count( Materials ))],pos )
+		local particle = emitter:Add( Materials[ math.random( 1, #Materials ) ], pos )
 		
 		local rCol = 255
 		

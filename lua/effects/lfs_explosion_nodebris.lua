@@ -42,7 +42,7 @@ function EFFECT:Explosion( pos , scale )
 	
 	if emitter then
 		for i = 0,10 do
-			local particle = emitter:Add( Materials[math.random(1,table.Count( Materials ))], pos )
+			local particle = emitter:Add( Materials[ math.random( 1, #Materials ) ], pos )
 			
 			if particle then
 				particle:SetVelocity( VectorRand() * 1000 * scale )

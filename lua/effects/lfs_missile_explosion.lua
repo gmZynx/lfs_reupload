@@ -28,7 +28,7 @@ function EFFECT:Init( data )
 	local emitter = ParticleEmitter( self.Pos, false )
 
 	for i = 0,30 do
-		local particle = emitter:Add( self.Materials[math.random(1,table.Count( self.Materials ))], self.Pos )
+		local particle = emitter:Add( self.Materials[ math.random( 1, #self.Materials ) ], self.Pos )
 		
 		if particle then
 			particle:SetVelocity( VectorRand(-1,1) * 1200 )

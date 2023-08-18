@@ -6,8 +6,8 @@ local meta = FindMetaTable( "Player" )
 simfphys = istable( simfphys ) and simfphys or {} -- lets check if the simfphys table exists. if not, create it!
 simfphys.LFS = {} -- lets add another table for this project. We will be storing all our global functions and variables here. LFS means LunasFlightSchool
 
-simfphys.LFS.VERSION = 308
-simfphys.LFS.VERSION_TYPE = ".WS"
+simfphys.LFS.VERSION = 310
+simfphys.LFS.VERSION_TYPE = ".GIT"
 
 simfphys.LFS.KEYS_IN = {}
 simfphys.LFS.KEYS_DEFAULT = {}
@@ -39,7 +39,7 @@ function simfphys.LFS:AddKey(name, class, name_menu, default, cmd, IN_KEY)
 end
 
 local DEFAULT_KEYS = {
-    {name = "EXIT",			class = "misc",		name_menu = "Exit Vehicle",		default = KEY_J,		cmd = "cl_lfs_exit",					IN_KEY = 0},
+    {name = "EXIT",			class = "misc",		name_menu = "Exit Vehicle",		default = KEY_E,		cmd = "cl_lfs_exit",					IN_KEY = 0},
     {name = "FREELOOK",		class = "misc",		name_menu = "Freelook (Hold)",	default = MOUSE_MIDDLE,	cmd = "cl_lfs_freelook",				IN_KEY = IN_WALK},
     {name = "ENGINE",			class = "misc",		name_menu = "Toggle Engine",		default = KEY_R,		cmd = "cl_lfs_toggle_engine",			IN_KEY = IN_RELOAD},
     {name = "VSPEC",			class = "misc",		name_menu = "Toggle Vehicle-specific Function",	default = KEY_SPACE,	cmd = "cl_lfs_toggle_vspecific",	IN_KEY = IN_JUMP},
@@ -50,8 +50,8 @@ local DEFAULT_KEYS = {
     {name = "-THROTTLE",		class = "plane",		name_menu = "Throttle Decrease",	default = KEY_S,		cmd = "cl_lfs_throttle_dec",	IN_KEY = IN_BACK},
     {name = "+PITCH",			class = "plane",		name_menu = "Pitch Up",			default = KEY_LSHIFT,	cmd = "cl_lfs_pitch_up",		IN_KEY = IN_SPEED},
     {name = "-PITCH",			class = "plane",		name_menu = "Pitch Down",		default = KEY_LALT,	cmd = "cl_lfs_pitch_Down",	IN_KEY = 0},
-    {name = "-YAW",			class = "plane",		name_menu = "Yaw Left",			default = KEY_Q,		cmd = "cl_lfs_yaw_left",		IN_KEY = 0},
-    {name = "+YAW",			class = "plane",		name_menu = "Yaw Right",		default = KEY_E,		cmd = "cl_lfs_yaw_right",		IN_KEY = 0},
+    {name = "-YAW",			class = "plane",		name_menu = "Yaw Left",			default = 0,		cmd = "cl_lfs_yaw_left",		IN_KEY = 0},
+    {name = "+YAW",			class = "plane",		name_menu = "Yaw Right",		default = 0,		cmd = "cl_lfs_yaw_right",		IN_KEY = 0},
     {name = "-ROLL",			class = "plane",		name_menu = "Roll Left",			default = KEY_A,		cmd = "cl_lfs_roll_left",		IN_KEY = IN_MOVELEFT},
     {name = "+ROLL",			class = "plane",		name_menu = "Roll Right",			default = KEY_D,		cmd = "cl_lfs_roll_right",		IN_KEY = IN_MOVERIGHT},
 
@@ -59,8 +59,8 @@ local DEFAULT_KEYS = {
     {name = "-THROTTLE_HELI",	class = "heli",		name_menu = "Throttle Decrease",			default = KEY_S,		cmd = "cl_lfsheli_throttle_dec",	IN_KEY = IN_BACK},
     {name = "+PITCH_HELI",		class = "heli",		name_menu = "Pitch Up (Hovermode Only)",	default = KEY_LALT,		cmd = "cl_lfsheli_pitch_up",	IN_KEY = 0},
     {name = "-PITCH_HELI",		class = "heli",		name_menu = "Pitch Down (Hovermode Only)",	default = KEY_LSHIFT ,	cmd = "cl_lfsheli_pitch_Down",	IN_KEY = 0},
-    {name = "-YAW_HELI",		class = "heli",		name_menu = "Yaw Left (Hovermode Only)",	default = KEY_Q,		cmd = "cl_lfsheli_yaw_left",	IN_KEY = 0},
-    {name = "+YAW_HELI",		class = "heli",		name_menu = "Yaw Righ (Hovermode Only)",	default = KEY_E,		cmd = "cl_lfsheli_yaw_right",	IN_KEY = 0},
+    {name = "-YAW_HELI",		class = "heli",		name_menu = "Yaw Left (Hovermode Only)",	default = 0,		cmd = "cl_lfsheli_yaw_left",	IN_KEY = 0},
+    {name = "+YAW_HELI",		class = "heli",		name_menu = "Yaw Righ (Hovermode Only)",	default = 0,		cmd = "cl_lfsheli_yaw_right",	IN_KEY = 0},
     {name = "-ROLL_HELI",		class = "heli",		name_menu = "Roll Left",					default = KEY_A,		cmd = "cl_lfsheli_roll_left",		IN_KEY = IN_MOVELEFT},
     {name = "+ROLL_HELI",		class = "heli",		name_menu = "Roll Right",					default = KEY_D,		cmd = "cl_lfsheli_roll_right",	IN_KEY = IN_MOVERIGHT},
     {name = "HOVERMODE",		class = "heli",		name_menu = "Hovermode (Hold)",			default = KEY_SPACE,	cmd = "cl_lfsheli_hover",		IN_KEY = IN_SPEED},

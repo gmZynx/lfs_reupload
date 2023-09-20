@@ -1539,15 +1539,32 @@ function ENT:Destroy()
 	end
 end
 
+function ENT:VectorSubtractNormal( Normal, Velocity )
+	local VelForward = Velocity:GetNormalized()
+
+	local Ax = math.acos( math.Clamp( Normal:Dot( VelForward ), -1, 1 ) )
+
+	local Fx = math.cos( Ax ) * Velocity:Length()
+
+	local NewVelocity = Velocity - Normal * math.abs( Fx )
+
+	return NewVelocity
+end
+
 function ENT:PhysicsCollide( data, physobj )
 	if self:IsDestroyed() then
 		self.MarkForDestruction = true
 	end
 
-	if IsValid( data.HitEntity ) then
-		if data.HitEntity:IsPlayer() or data.HitEntity:IsNPC() or simfphys.LFS.CollisionFilter[data.HitEntity:GetClass():lower()] then
+	if data.HitEntity:IsValid() then
+		if data.HitEntity:IsPlayer() or data.HitEntity:IsNPC() or simfphys.LFS.CollisionFilter[ data.HitEntity:GetClass():lower() ] then
 			return
 		end
+	elseif data.TheirSurfaceProps == 76 then
+		local NewVelocity = self:VectorSubtractNormal( data.HitNormal, data.OurOldVelocity ) - data.HitNormal * 250
+			physobj:SetVelocityInstantaneous( NewVelocity )
+			physobj:SetAngleVelocityInstantaneous( data.OurOldAngularVelocity )
+		return
 	end
 
 	if data.Speed > 60 and data.DeltaTime > 0.2 then

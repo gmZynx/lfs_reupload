@@ -1,16 +1,14 @@
---DO NOT EDIT OR REUPLOAD THIS FILE
-
 AddCSLuaFile()
 
-ENT.Type            = "anim"
+ENT.Type = "anim"
 
 ENT.PrintName = "Maintenance Station"
 ENT.Author = "Luna"
 ENT.Information = "Repairs Vehicles"
 ENT.Category = "[LFS]"
 
-ENT.Spawnable		= true
-ENT.AdminOnly		= false
+ENT.Spawnable = true
+ENT.AdminOnly = false
 
 ENT.FoundVehicles = {}
 
@@ -35,9 +33,9 @@ if SERVER then
 		self:TakePhysicsDamage( dmginfo )
 	end
 
-	function ENT:Initialize()	
+	function ENT:Initialize()
 		self:SetModel( "models/props_vehicles/generatortrailer01.mdl" )
-		
+
 		self:PhysicsInit( SOLID_VPHYSICS )
 		self:SetMoveType( MOVETYPE_VPHYSICS )
 		self:SetSolid( SOLID_VPHYSICS )
@@ -48,7 +46,7 @@ if SERVER then
 
 	function ENT:Use( ply )
 	end
-	
+
 	function ENT:Think()
 		self:NextThink( CurTime() + 0.5 )
 
@@ -69,9 +67,9 @@ if SERVER then
 		for _, v in ipairs( FoundVehicles ) do
 			local id = v:EntIndex()
 
-			if not self.FoundVehicles[ id ] then
+			if not self.FoundVehicles[id] then
 				v:StartMaintenance()
-				self.FoundVehicles[ id ] = true
+				self.FoundVehicles[id] = true
 			end
 		end
 
@@ -79,13 +77,13 @@ if SERVER then
 			local v = Entity( id )
 
 			if not IsValid( v ) then
-				self.FoundVehicles[ id ] = nil
+				self.FoundVehicles[id] = nil
 
 				continue
 			else
 				local pos = v:GetPos()
 				if not v.MaintenanceStart then
-					self.FoundVehicles[ id ] = nil
+					self.FoundVehicles[id] = nil
 				end
 			end
 		end
@@ -130,7 +128,7 @@ if CLIENT then
 			if (self.WaveScale or 0) > 0 then
 				self.WaveScale = math.max( self.WaveScale - FrameTime(), 0 )
 				local InvScale = 1 - self.WaveScale
-		
+
 				cam.Start3D2D( self:GetPos() + Vector(0,0,10), self:LocalToWorldAngles( Angle(0,-90,0) ), 1 )
 					local Col =  Color(255,255,255,255)
 					surface.SetDrawColor( Col.r, Col.g, Col.b, 10 * self.WaveScale )

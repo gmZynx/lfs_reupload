@@ -1,5 +1,3 @@
---DO NOT EDIT OR REUPLOAD THIS FILE
-
 local Materials = {
 	"particle/smokesprites_0001",
 	"particle/smokesprites_0002",
@@ -21,7 +19,7 @@ local Materials = {
 
 function EFFECT:Init( data )
 	local Pos = data:GetOrigin() + VectorRand() * 50
-	
+
 	local emitter = ParticleEmitter( Pos, false )
 
 	if emitter then
@@ -30,7 +28,7 @@ function EFFECT:Init( data )
 		if particle then
 			particle:SetVelocity( VectorRand() * 100 )
 			particle:SetDieTime( 1.5 )
-			particle:SetAirResistance( 600 ) 
+			particle:SetAirResistance( 600 )
 			particle:SetStartAlpha( 50 )
 			particle:SetStartSize( 80 )
 			particle:SetEndSize( math.Rand(250,300) )
@@ -39,7 +37,7 @@ function EFFECT:Init( data )
 			particle:SetGravity( Vector( 0, 0, 500 ) )
 			particle:SetCollide( false )
 		end
-		
+
 		emitter:Finish()
 	end
 end

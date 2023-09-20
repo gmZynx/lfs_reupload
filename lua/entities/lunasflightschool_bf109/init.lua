@@ -1,12 +1,10 @@
---DO NOT EDIT OR REUPLOAD THIS FILE
-
 AddCSLuaFile( "shared.lua" )
 AddCSLuaFile( "cl_init.lua" )
 include("shared.lua")
 
 function ENT:RunOnSpawn()
-	self:SetBodygroup( 14, 1 ) 
-	self:SetBodygroup( 13, 1 ) 
+	self:SetBodygroup( 14, 1 )
+	self:SetBodygroup( 13, 1 )
 end
 
 function ENT:PrimaryAttack()
@@ -17,29 +15,29 @@ function ENT:PrimaryAttack()
 	end
 
 	self:SetNextPrimary( 0.03 )
-	
+
 	self.MirrorPrimary = not self.MirrorPrimary
-	
+
 	local Mirror = self.MirrorPrimary and -1 or 1
-	
+
 	local bullet = {}
-	bullet.Num 	= 1
-	bullet.Src 	= self:LocalToWorld( Vector(109.29,7.13 * Mirror,92.85) )
-	bullet.Dir 	= self:GetForward()
-	bullet.Spread 	= Vector( 0.015,  0.015, 0 )
-	bullet.Tracer	= 1
-	bullet.TracerName	= "lfs_tracer_green"
-	bullet.Force	= 10
-	bullet.HullSize 	= 5
-	bullet.Damage	= 10
-	bullet.Attacker 	= self:GetDriver()
+	bullet.Num = 1
+	bullet.Src = self:LocalToWorld( Vector(109.29,7.13 * Mirror,92.85) )
+	bullet.Dir = self:GetForward()
+	bullet.Spread = Vector( 0.015,  0.015, 0 )
+	bullet.Tracer = 1
+	bullet.TracerName = "lfs_tracer_green"
+	bullet.Force = 10
+	bullet.HullSize = 5
+	bullet.Damage = 10
+	bullet.Attacker = self:GetDriver()
 	bullet.AmmoType = "Pistol"
 	bullet.Callback = function(att, tr, dmginfo)
 		dmginfo:SetDamageType(DMG_AIRBOAT)
 	end
-	
+
 	self:FireBullets( bullet )
-	
+
 	self:TakePrimaryAmmo( 2 )
 end
 
@@ -51,29 +49,29 @@ function ENT:SecondaryAttack()
 	end
 
 	self:SetNextSecondary( 0.15 )
-	
+
 	self.MirrorSecondary = not self.MirrorSecondary
-	
+
 	local Mirror = self.MirrorSecondary and -1 or 1
-	
+
 	local bullet = {}
 
-	bullet.Num 	= 1
-	bullet.Src 	= self:LocalToWorld( Vector(93.58,85.93 * Mirror,63.63) )
-	bullet.Dir 	= self:LocalToWorldAngles( Angle(0,-0.5 * Mirror,0) ):Forward()
-	bullet.Spread 	= Vector( 0.015,  0.015, 0 )
-	bullet.Tracer	= 1
-	bullet.TracerName	= "lfs_tracer_red"
-	bullet.Force	= 100
-	bullet.HullSize 	= 10
-	bullet.Damage	= 125
-	bullet.Attacker 	= self:GetDriver()
+	bullet.Num = 1
+	bullet.Src = self:LocalToWorld( Vector(93.58,85.93 * Mirror,63.63) )
+	bullet.Dir = self:LocalToWorldAngles( Angle(0,-0.5 * Mirror,0) ):Forward()
+	bullet.Spread = Vector( 0.015,  0.015, 0 )
+	bullet.Tracer = 1
+	bullet.TracerName = "lfs_tracer_red"
+	bullet.Force = 100
+	bullet.HullSize = 10
+	bullet.Damage = 125
+	bullet.Attacker = self:GetDriver()
 	bullet.AmmoType = "Pistol"
 	bullet.Callback = function(att, tr, dmginfo)
 		dmginfo:SetDamageType(DMG_AIRBOAT)
 	end
 	self:FireBullets( bullet )
-	
+
 	self:TakeSecondaryAmmo()
 end
 
@@ -84,7 +82,7 @@ function ENT:HandleWeapons(Fire1, Fire2)
 		if self:GetAmmoPrimary() > 0 then
 			Fire1 = Driver:KeyDown( IN_ATTACK )
 		end
-		
+
 		if self:GetAmmoSecondary() > 0 then
 			Fire2 = Driver:KeyDown( IN_ATTACK2 )
 		end
@@ -99,7 +97,7 @@ function ENT:HandleWeapons(Fire1, Fire2)
 	end
 
 	if self.OldFire ~= Fire1 then
-		
+
 		if Fire1 then
 			if not self:GetAI() then
 				self.wpn1 = CreateSound( self, "BF109_FIRE_LOOP" )
@@ -122,10 +120,10 @@ function ENT:HandleWeapons(Fire1, Fire2)
 				end
 			end
 		end
-		
+
 		self.OldFire = Fire1
 	end
-	
+
 	if self.OldFire2 ~= Fire2 then
 
 		if Fire2 then
@@ -150,7 +148,7 @@ function ENT:HandleWeapons(Fire1, Fire2)
 				end
 			end
 		end
-		
+
 		self.OldFire2 = Fire2
 	end
 end

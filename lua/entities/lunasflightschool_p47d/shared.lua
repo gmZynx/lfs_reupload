@@ -1,6 +1,4 @@
---DO NOT EDIT OR REUPLOAD THIS FILE
-
-ENT.Type            = "anim"
+ENT.Type = "anim"
 DEFINE_BASECLASS( "lunasflightschool_basescript" )
 
 ENT.PrintName = "P-47D"
@@ -8,8 +6,8 @@ ENT.Author = "Luna"
 ENT.Information = "American World War 2 Fighterplane"
 ENT.Category = "[LFS] - Planes"
 
-ENT.Spawnable		= true
-ENT.AdminSpawnable		= false
+ENT.Spawnable = true
+ENT.AdminSpawnable = false
 
 ENT.MDL = "models/p-47 (fly).mdl"
 
@@ -37,7 +35,7 @@ ENT.WheelRadius = 18
 ENT.WheelPos_L = Vector(115.22,104.53,4.87)
 ENT.WheelPos_R =  Vector(115.22,-104.53,4.87)
 ENT.WheelPos_C = Vector(-161.67,0,63)
- 
+
 ENT.MaxVelocity = 2400
 
 ENT.MaxThrust = 850

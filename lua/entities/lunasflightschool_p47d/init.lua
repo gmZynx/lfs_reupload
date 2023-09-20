@@ -1,5 +1,3 @@
---DO NOT EDIT OR REUPLOAD THIS FILE
-
 AddCSLuaFile( "shared.lua" )
 AddCSLuaFile( "cl_init.lua" )
 include("shared.lua")
@@ -26,37 +24,37 @@ function ENT:PrimaryAttack()
 
 	self.NumPrim = self.NumPrim and self.NumPrim + 1 or 1
 	if self.NumPrim > 8 then self.NumPrim = 1 end
-	
+
 	local bullet = {}
-	bullet.Num 	= 1
-	bullet.Src 	= self:LocalToWorld( fP[self.NumPrim] )
-	bullet.Dir 	= self:LocalToWorldAngles( Angle(-0.5,(fP[self.NumPrim].y > 0 and -2 or 2),0) ):Forward()
-	bullet.Spread 	= Vector( 0.015,  0.015, 0 )
-	bullet.Tracer	= 1
-	bullet.TracerName	= "lfs_tracer_green"
-	bullet.Force	= 100
-	bullet.HullSize 	= 10
-	bullet.Damage	= 32
-	bullet.Attacker 	= self:GetDriver()
+	bullet.Num = 1
+	bullet.Src = self:LocalToWorld( fP[self.NumPrim] )
+	bullet.Dir = self:LocalToWorldAngles( Angle(-0.5,(fP[self.NumPrim].y > 0 and -2 or 2),0) ):Forward()
+	bullet.Spread = Vector( 0.015,  0.015, 0 )
+	bullet.Tracer = 1
+	bullet.TracerName = "lfs_tracer_green"
+	bullet.Force = 100
+	bullet.HullSize = 10
+	bullet.Damage = 32
+	bullet.Attacker = self:GetDriver()
 	bullet.AmmoType = "Pistol"
 	bullet.Callback = function(att, tr, dmginfo)
 		dmginfo:SetDamageType(DMG_AIRBOAT)
 	end
 	self:FireBullets( bullet )
-	
+
 	self:TakePrimaryAmmo( 2 )
 end
 
 function ENT:SecondaryAttack()
 	if self:GetAI() then return end
 	if not self:CanSecondaryAttack() then return end
-	
+
 	self:SetNextSecondary( 0.1 )
 
 	self:TakeSecondaryAmmo()
-	
+
 	if istable( self.MissileEnts ) then
-		local Missile = self.MissileEnts[ self:GetAmmoSecondary() + 1 ]
+		local Missile = self.MissileEnts[self:GetAmmoSecondary() + 1]
 		Missile:EmitSound( "npc/waste_scanner/grenade_fire.wav" )
 		if IsValid( Missile ) then
 			local ent = ents.Create( "lunasflightschool_missile" )
@@ -69,14 +67,14 @@ function ENT:SecondaryAttack()
 			ent:SetAttacker( self:GetDriver() )
 			ent:SetInflictor( self )
 			ent:SetStartVelocity( self:GetVelocity():Length() )
-			
-			constraint.NoCollide( ent, self, 0, 0 ) 
-			
+
+			constraint.NoCollide( ent, self, 0, 0 )
+
 			if IsValid( self.wheel_R ) then
-				constraint.NoCollide( ent, self.wheel_R, 0, 0 ) 
+				constraint.NoCollide( ent, self.wheel_R, 0, 0 )
 			end
 			if IsValid( self.wheel_L ) then
-				constraint.NoCollide( ent, self.wheel_L, 0, 0 ) 
+				constraint.NoCollide( ent, self.wheel_L, 0, 0 )
 			end
 		end
 	end
@@ -90,14 +88,14 @@ function ENT:RunOnSpawn()
 	if self.LandingGearUp then
 		self:SetBodygroup( 13, 0 )
 	else
-		self:SetBodygroup( 13, 1 ) 
+		self:SetBodygroup( 13, 1 )
 	end
 	]]--
-	
+
 	self:SetBodygroup( 23, 1 )
-	
+
 	self.MissileEnts = {}
-	
+
 	for k,v in pairs( self.MISSILES ) do
 		for _,n in pairs( v ) do
 			local Missile = ents.Create( "prop_dynamic" )
@@ -112,37 +110,37 @@ function ENT:RunOnSpawn()
 			Missile:SetParent( self )
 			Missile.DoNotDuplicate = true
 			self:dOwner( Missile )
-			
+
 			table.insert( self.MissileEnts, Missile )
 		end
 	end
 end
 
 function ENT:CreateAI()
-	self:SetBodygroup( 15, 0 ) 
+	self:SetBodygroup( 15, 0 )
 end
 
 function ENT:RemoveAI()
-	self:SetBodygroup( 15, 1 ) 
+	self:SetBodygroup( 15, 1 )
 end
 
 function ENT:HandleWeapons(Fire1, Fire2)
 	local Driver = self:GetDriver()
-	
+
 	if IsValid( Driver ) then
 		if self:GetAmmoPrimary() > 0 then
 			Fire1 = Driver:KeyDown( IN_ATTACK )
 		end
-		
+
 		if self:GetAmmoSecondary() > 0 then
 			Fire2 = Driver:KeyDown( IN_ATTACK2 )
 		end
 	end
-	
+
 	if Fire1 then
 		self:PrimaryAttack()
 	end
-	
+
 	if istable( self.MissileEnts ) then
 		for k, v in pairs( self.MissileEnts ) do
 			if IsValid( v ) then
@@ -154,7 +152,7 @@ function ENT:HandleWeapons(Fire1, Fire2)
 			end
 		end
 	end
-	
+
 	if self.OldFire2 ~= Fire2 then
 		if Fire2 then
 			self:SecondaryAttack()
@@ -186,7 +184,7 @@ function ENT:HandleWeapons(Fire1, Fire2)
 				end
 			end
 		end
-		
+
 		self.OldFire = Fire1
 	end
 end
@@ -205,7 +203,7 @@ function ENT:OnLandingGearToggled( bOn )
 	if bOn then
 		self:SetBodygroup( 13, 0 )
 	else
-		self:SetBodygroup( 13, 1 ) 
+		self:SetBodygroup( 13, 1 )
 	end
 	]]
 end

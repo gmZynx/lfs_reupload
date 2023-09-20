@@ -1,6 +1,4 @@
---DO NOT EDIT OR REUPLOAD THIS FILE
-
-ENT.Type            = "anim"
+ENT.Type = "anim"
 DEFINE_BASECLASS( "lunasflightschool_basescript" )
 
 ENT.PrintName = "BF 109"
@@ -8,8 +6,8 @@ ENT.Author = "Luna"
 ENT.Information = "German World War 2 Fighterplane"
 ENT.Category = "[LFS] - Planes"
 
-ENT.Spawnable		= true
-ENT.AdminSpawnable  = false
+ENT.Spawnable = true
+ENT.AdminSpawnable = false
 
 ENT.MDL = "models/blu/bf109.mdl"
 

@@ -1,4 +1,4 @@
--- YOU CAN EDIT AND REUPLOAD THIS FILE. 
+-- YOU CAN EDIT AND REUPLOAD THIS FILE.
 -- HOWEVER MAKE SURE TO RENAME THE FOLDER TO AVOID CONFLICTS
 
 AddCSLuaFile( "shared.lua" )
@@ -29,11 +29,11 @@ end
 function ENT:RunOnSpawn() -- called when the vehicle is spawned
 	--[[
 	local SpawnedPod = self:AddPassengerSeat( Vector(0,0,50), Angle(0,-90,0) ) -- add a passenger seat, store it inside "SpawnedPod" local variable
-	
+
 	SpawnedPod.ExitPos = Vector(0,80,20)  -- assigns an exit pos for SpawnedPod
-	
-	self:SetGunnerSeat( SpawnedPod ) -- set our SpawnedPod as gunner seat using the inbuild gunner functions. 
-							-- Gunner seat will automatically trigger crosshair enable for the player who is sitting in it. 
+
+	self:SetGunnerSeat( SpawnedPod ) -- set our SpawnedPod as gunner seat using the inbuild gunner functions.
+							-- Gunner seat will automatically trigger crosshair enable for the player who is sitting in it.
 							-- You can get the player who sitting in this pod using self:GetGunner()
 							-- If you want to add more gunners you will have to write your own functions
 	]]--
@@ -43,38 +43,38 @@ function ENT:PrimaryAttack()
 	if not self:CanPrimaryAttack() then return end
 
 	self:SetNextPrimary( 0.15 )
-	
-	--[[ do primary attack code here ]]--
-	
+
+	-- do primary attack code here
+
 	self:EmitSound( "Weapon_SMG1.NPC_Single" )
-	
+
 	local Driver = self:GetDriver()
-	
+
 	local bullet = {}
-	bullet.Num 	= 1
-	bullet.Src 	= self:LocalToWorld( Vector(20,0,10) )
-	bullet.Dir 	= self:GetForward()
-	bullet.Spread 	= Vector( 0.015,  0.015, 0 )
-	bullet.Tracer	= 1
-	bullet.TracerName	= "lfs_tracer_green"
-	bullet.Force	= 10
-	bullet.HullSize 	= 5
-	bullet.Damage	= 5
-	bullet.Attacker 	= Driver
+	bullet.Num = 1
+	bullet.Src = self:LocalToWorld( Vector(20,0,10) )
+	bullet.Dir = self:GetForward()
+	bullet.Spread = Vector( 0.015,  0.015, 0 )
+	bullet.Tracer = 1
+	bullet.TracerName = "lfs_tracer_green"
+	bullet.Force = 10
+	bullet.HullSize = 5
+	bullet.Damage = 5
+	bullet.Attacker = Driver
 	bullet.AmmoType = "Pistol"
-	
+
 	self:FireBullets( bullet )
-	
+
 	self:TakePrimaryAmmo()
 end
 
 function ENT:SecondaryAttack()
 	if not self:CanSecondaryAttack() then return end
-	
+
 	self:SetNextSecondary( 0.15 )
 
-	--[[ do secondary attack code here ]]--
-	
+	--[[do secondary attack code here]]--
+
 	self:TakeSecondaryAmmo()
 end
 
@@ -118,26 +118,26 @@ end
 ]]--
 
 function ENT:OnEngineStarted()
-	--[[ play engine start sound? ]]--
+	--[[play engine start sound?]]--
 	self:EmitSound( "vehicles/airboat/fan_motor_start1.wav" )
 end
 
 function ENT:OnEngineStopped()
-	--[[ play engine stop sound? ]]--
+	--[[play engine stop sound?]]--
 	self:EmitSound( "vehicles/airboat/fan_motor_shut_off1.wav" )
 end
 
 function ENT:OnVtolMode( IsOn )
-	--[[ called when vtol mode is activated / deactivated ]]--
+	--[[called when vtol mode is activated / deactivated]]--
 end
 
 function ENT:OnLandingGearToggled( bOn )
 	self:EmitSound( "vehicles/tank_readyfire1.wav" )
-	
+
 	if bOn then
-		--[[ set bodygroup of landing gear down? ]]--
+		--[[set bodygroup of landing gear down?]]--
 	else
-		--[[ set bodygroup of landing gear up? ]]--
+		--[[set bodygroup of landing gear up?]]--
 	end
 end
 

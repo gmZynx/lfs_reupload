@@ -1,5 +1,3 @@
---DO NOT EDIT OR REUPLOAD THIS FILE
-
 AddCSLuaFile( "shared.lua" )
 AddCSLuaFile( "cl_init.lua" )
 include("shared.lua")
@@ -17,4 +15,3 @@ end
 function ENT:OnEngineStopped()
 	self:EmitSound( "lfs/cessna/stop.wav" )
 end
-

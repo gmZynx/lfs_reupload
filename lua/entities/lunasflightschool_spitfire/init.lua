@@ -1,5 +1,3 @@
---DO NOT EDIT OR REUPLOAD THIS FILE
-
 AddCSLuaFile( "shared.lua" )
 AddCSLuaFile( "cl_init.lua" )
 include("shared.lua")
@@ -16,28 +14,28 @@ function ENT:PrimaryAttack()
 	end
 
 	self:SetNextPrimary( 0.03 )
-	
+
 	self.MirrorPrimary = not self.MirrorPrimary
-	
+
 	local Mirror = self.MirrorPrimary and -1 or 1
-	
+
 	local bullet = {}
-	bullet.Num 	= 1
-	bullet.Src 	= self:LocalToWorld( Vector(136.19,74.97 * Mirror,53.7) )
-	bullet.Dir 	= self:LocalToWorldAngles( Angle(0,-0.6 * Mirror,0) ):Forward()
-	bullet.Spread 	= Vector( 0.018,  0.018, 0 )
-	bullet.Tracer	= 1
-	bullet.TracerName	= "lfs_tracer_white"
-	bullet.Force	= 100
-	bullet.HullSize 	= 10
-	bullet.Damage	= 26
-	bullet.Attacker 	= self:GetDriver()
+	bullet.Num = 1
+	bullet.Src = self:LocalToWorld( Vector(136.19,74.97 * Mirror,53.7) )
+	bullet.Dir = self:LocalToWorldAngles( Angle(0,-0.6 * Mirror,0) ):Forward()
+	bullet.Spread = Vector( 0.018,  0.018, 0 )
+	bullet.Tracer = 1
+	bullet.TracerName = "lfs_tracer_white"
+	bullet.Force = 100
+	bullet.HullSize = 10
+	bullet.Damage = 26
+	bullet.Attacker = self:GetDriver()
 	bullet.AmmoType = "Pistol"
 	bullet.Callback = function(att, tr, dmginfo)
 		dmginfo:SetDamageType(DMG_AIRBOAT)
 	end
 	self:FireBullets( bullet )
-	
+
 	self:TakePrimaryAmmo( 2 )
 end
 
@@ -86,7 +84,7 @@ function ENT:HandleWeapons(Fire1, Fire2)
 				end
 			end
 		end
-		
+
 		self.OldFire = Fire1
 	end
 end

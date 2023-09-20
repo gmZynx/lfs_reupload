@@ -4,7 +4,7 @@ local meta = FindMetaTable( "Player" )
 simfphys = istable( simfphys ) and simfphys or {} -- lets check if the simfphys table exists. if not, create it!
 simfphys.LFS = {} -- lets add another table for this project. We will be storing all our global functions and variables here. LFS means LunasFlightSchool
 
-simfphys.LFS.VERSION = 310
+simfphys.LFS.VERSION = 311
 simfphys.LFS.VERSION_TYPE = ".GIT"
 
 simfphys.LFS.KEYS_IN = {}

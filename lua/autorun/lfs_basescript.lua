@@ -19,7 +19,7 @@ simfphys.LFS.cVar_IgnoreNPCs = CreateConVar( "lfs_ai_ignorenpcs", "0", {FCVAR_RE
 
 simfphys.LFS.FreezeTeams = CreateConVar( "lfs_freeze_teams", "0", {FCVAR_REPLICATED , FCVAR_ARCHIVE},"enable/disable auto ai-team switching" )
 simfphys.LFS.TeamPassenger = CreateConVar( "lfs_teampassenger", "0", {FCVAR_REPLICATED , FCVAR_ARCHIVE},"only allow players of matching ai-team to enter the vehicle? 1 = team only, 0 = everyone can enter" )
-simfphys.LFS.PlayerDefaultTeam = CreateConVar( "lfs_default_teams", "0", {FCVAR_REPLICATED , FCVAR_ARCHIVE},"set default player ai-team" )
+simfphys.LFS.PlayerDefaultTeam = CreateConVar( "lfs_default_teams", "1", {FCVAR_REPLICATED , FCVAR_ARCHIVE},"set default player ai-team" )
 
 simfphys.LFS.IgnoreNPCs = simfphys.LFS.cVar_IgnoreNPCs and simfphys.LFS.cVar_IgnoreNPCs:GetBool() or false
 simfphys.LFS.IgnorePlayers = cVar_playerignore and cVar_playerignore:GetBool() or false
@@ -337,24 +337,27 @@ if SERVER then
         if not IsValid( ply ) then return end
 
         local LFSent = net.ReadEntity()
-
         if not IsValid( LFSent ) then return end
+        if not LFSent.LFS then return end
+        if LFSent.CrosshairFilterEnts then return end
 
-        if not istable( LFSent.CrosshairFilterEnts ) then
-            LFSent.CrosshairFilterEnts = {}
+        local plane = ply:lfsGetPlane()
+        if not IsValid( plane ) then return end
+        if plane ~= LFSent then return end
 
-            for _, ent in pairs( constraint.GetAllConstrainedEntities( LFSent ) ) do
-                if IsValid( ent ) and not ent:GetNoDraw() then
-                    table.insert( LFSent.CrosshairFilterEnts, ent )
-                end
+        LFSent.CrosshairFilterEnts = {}
+
+        for _, ent in pairs( constraint.GetAllConstrainedEntities( LFSent ) ) do
+            if IsValid( ent ) and not ent:GetNoDraw() then
+                table.insert( LFSent.CrosshairFilterEnts, ent )
             end
+        end
 
-            for _, Parent in pairs( LFSent.CrosshairFilterEnts ) do
-                local Childs = Parent:GetChildren()
-                for _, Child in pairs( Childs ) do
-                    if IsValid( Child ) then
-                        table.insert( LFSent.CrosshairFilterEnts, Child )
-                    end
+        for _, Parent in pairs( LFSent.CrosshairFilterEnts ) do
+            local Childs = Parent:GetChildren()
+            for _, Child in pairs( Childs ) do
+                if IsValid( Child ) then
+                    table.insert( LFSent.CrosshairFilterEnts, Child )
                 end
             end
         end
@@ -363,7 +366,7 @@ if SERVER then
             net.WriteEntity( LFSent )
             net.WriteTable( LFSent.CrosshairFilterEnts )
         net.Send( ply )
-    end)
+    end )
 
     net.Receive( "lfs_admin_setconvar", function( length, ply )
         if not IsValid( ply ) or not ply:IsSuperAdmin() then return end
@@ -656,7 +659,7 @@ if CLIENT then
     local cvarShowRollIndic = CreateClientConVar( "lfs_show_rollindicator", 0, true, false)
     local cvarUnlockControls = CreateClientConVar( "lfs_hipster", 0, true, true)
     local cvarDisableQMENU = CreateClientConVar( "lfs_qmenudisable", 1, true, false)
-    local cvarHitMarker = CreateConVar( "lfs_hitmarker", 1, true, false)
+    local cvarHitMarker = CreateClientConVar( "lfs_hitmarker", 1, true, false)
 
     local ShowPlaneIdent = cvarShowPlaneIdent and cvarShowPlaneIdent:GetBool() or true
     local ShowShowRollIndic = cvarShowRollIndic and cvarShowRollIndic:GetBool() or false

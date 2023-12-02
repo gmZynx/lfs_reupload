@@ -874,6 +874,10 @@ function ENT:SetPassenger( ply )
 			ply:EnterVehicle( Seat )
 		else
 			if not IsValid( self:GetDriver() ) and not AI then
+				if not IsValid( DriverSeat ) then
+					print( "[LFS] ERROR: DriverSeat is invalid! Ent: " .. tostring( self ) .. " Class: " .. self:GetClass() )
+					return
+				end
 				ply:EnterVehicle( DriverSeat )
 			end
 		end
@@ -1415,7 +1419,7 @@ function ENT:OnTakeDamage( dmginfo )
 				local Attacker = dmginfo:GetAttacker()
 
 				if IsValid( Attacker ) and Attacker:IsPlayer() then
-					net.Start( "lfs_hitmarker" )
+					net.Start( "lfs_hitmarker", true )
 					net.Send( Attacker )
 				end
 			end
@@ -1427,7 +1431,7 @@ function ENT:OnTakeDamage( dmginfo )
 			local Attacker = dmginfo:GetAttacker()
 
 			if IsValid( Attacker ) and Attacker:IsPlayer() then
-				net.Start( "lfs_hitmarker" )
+				net.Start( "lfs_hitmarker", true )
 				net.Send( Attacker )
 			end
 		end
@@ -1440,7 +1444,7 @@ function ENT:OnTakeDamage( dmginfo )
 
 			local Attacker = self.FinalAttacker
 			if IsValid( Attacker ) and Attacker:IsPlayer() then
-				net.Start( "lfs_killmarker" )
+				net.Start( "lfs_killmarker", true )
 				net.Send( Attacker )
 			end
 
@@ -1657,7 +1661,14 @@ function ENT:AIGetTarget()
 	local ClosestTarget = NULL
 	local TargetDistance = 60000
 
-	if not simfphys.LFS.IgnorePlayers then
+	local shouldIgnorePlayers = false
+	if self.IgnorePlayersOverride ~= nil then
+		shouldIgnorePlayers = self.IgnorePlayersOverride
+	else
+		shouldIgnorePlayers = simfphys.LFS.IgnorePlayers
+	end
+
+	if not shouldIgnorePlayers then
 		for _, v in pairs( players ) do
 			if IsValid( v ) then
 				if v:Alive() then
@@ -1692,7 +1703,14 @@ function ENT:AIGetTarget()
 		end
 	end
 
-	if not simfphys.LFS.IgnoreNPCs then
+	local shouldIgnoreNpcs = false
+	if self.IgnoreNpcsOverride ~= nil then
+		shouldIgnoreNpcs = self.IgnoreNpcsOverride
+	else
+		shouldIgnoreNpcs = simfphys.LFS.IgnoreNPCs
+	end
+
+	if not shouldIgnoreNpcs then
 		for _, v in pairs( self:AIGetNPCTargets() ) do
 			if IsValid( v ) then
 				local HisTeam = self:AIGetNPCRelationship( v:GetClass() )

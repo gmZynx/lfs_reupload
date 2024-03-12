@@ -1,4 +1,5 @@
 local cVar_playerignore = GetConVar( "ai_ignoreplayers" )
+local ENTITY = FindMetaTable( "Entity" )
 local meta = FindMetaTable( "Player" )
 
 simfphys = istable( simfphys ) and simfphys or {} -- lets check if the simfphys table exists. if not, create it!
@@ -93,7 +94,7 @@ hook.Add( "OnEntityCreated", "!!!!lfsEntitySorter", function( ent )
     end )
 end )
 
-local ENTITY_IsValid = FindMetaTable( "Entity" ).IsValid
+local ENTITY_IsValid = ENTITY.IsValid
 hook.Add( "CalcMainActivity", "!!!lfs_playeranimations", function( ply )
     local Ent = ply:lfsGetPlane()
     if ENTITY_IsValid( Ent ) then
@@ -221,32 +222,36 @@ function meta:lfsGetAITeam()
     return self:GetNWInt( "lfsAITeam", simfphys.LFS.PlayerDefaultTeam:GetInt() )
 end
 
+local ENTITY_GetTable = ENTITY.GetTable
 function meta:lfsBuildControls()
-    if istable( self.LFS_BINDS ) then
-        table.Empty( self.LFS_BINDS )
+    local selftab = ENTITY_GetTable( self )
+    if istable( selftab.LFS_BINDS ) then
+        table.Empty( selftab.LFS_BINDS )
     end
 
     if SERVER then
-        self.LFS_BINDS = {
+        selftab.LFS_BINDS = {
             ["misc"] = {},
             ["plane"] = {},
             ["heli"] = {},
         }
 
-        self.LFS_HIPSTER = self:GetInfoNum( "lfs_hipster", 0 ) == 1
+        selftab.LFS_HIPSTER = self:GetInfoNum( "lfs_hipster", 0 ) == 1
 
         for _,v in pairs( simfphys.LFS.KEYS_DEFAULT ) do
-            self.LFS_BINDS[v.class][self:GetInfoNum( v.cmd, 0 )] = v.name
+            selftab.LFS_BINDS[ v.class ][ self:GetInfoNum( v.cmd, 0 ) ] = v.name
         end
     else
-        self.LFS_BINDS = {}
+        selftab.LFS_BINDS = {}
 
-        self.LFS_HIPSTER = GetConVar( "lfs_hipster" ):GetBool()
+        selftab.LFS_HIPSTER = GetConVar( "lfs_hipster" ):GetBool()
 
         for _,v in pairs( simfphys.LFS.KEYS_DEFAULT ) do
-            self.LFS_BINDS[v.name] = GetConVar( v.cmd ):GetInt()
+            selftab.LFS_BINDS[ v.name ] = GetConVar( v.cmd ):GetInt()
         end
     end
+
+    return selftab.LFS_BINDS
 end
 
 function meta:lfsGetControls()

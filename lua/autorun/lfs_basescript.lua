@@ -93,28 +93,20 @@ hook.Add( "OnEntityCreated", "!!!!lfsEntitySorter", function( ent )
     end )
 end )
 
+local ENTITY_IsValid = FindMetaTable( "Entity" ).IsValid
 hook.Add( "CalcMainActivity", "!!!lfs_playeranimations", function( ply )
-    if not ply:GetTable().lfsGetPlane then return end
-
     local Ent = ply:lfsGetPlane()
-
-    if IsValid( Ent ) then
+    if ENTITY_IsValid( Ent ) then
         local A, B = Ent:CalcMainActivity( ply )
-
-        if A and B then
-            return A, B
-        end
+        if A and B then return A, B end
     end
 end )
 
 hook.Add( "StartCommand", "!!!!LFS_grab_command", function( ply, cmd )
-    if not ply.lfsGetPlane then return end
-
     local veh = ply:lfsGetPlane()
-
-    if not IsValid( veh ) then return end
-
-    veh:StartCommand( ply, cmd )
+    if ENTITY_IsValid( veh ) then
+        veh:StartCommand( ply, cmd )
+    end
 end )
 
 function simfphys.LFS:NPCsGetAll()
@@ -149,76 +141,72 @@ function simfphys.LFS:PlanesGetAll()
     return simfphys.LFS.PlanesStored
 end
 
+local Teams = {
+    ["npc_breen"] = 1,
+    ["npc_combine_s"] = 1,
+    ["npc_combinedropship"] = 1,
+    ["npc_combinegunship"] = 1,
+    ["npc_crabsynth"] = 1,
+    ["npc_cscanner"] = 1,
+    ["npc_helicopter"] = 1,
+    ["npc_manhack"] = 1,
+    ["npc_metropolice"] = 1,
+    ["npc_mortarsynth"] = 1,
+    ["npc_sniper"] = 1,
+    ["npc_stalker"] = 1,
+    ["npc_strider"] = 1,
+    ["monster_human_grunt"] = 1,
+    ["monster_human_assassin"] = 1,
+    ["monster_sentry"] = 1,
+
+    ["npc_kleiner"] = 2,
+    ["npc_monk"] = 2,
+    ["npc_mossman"] = 2,
+    ["npc_vortigaunt"] = 2,
+    ["npc_alyx"] = 2,
+    ["npc_barney"] = 2,
+    ["npc_citizen"] = 2,
+    ["npc_dog"] = 2,
+    ["npc_eli"] = 2,
+    ["monster_scientist"] = 2,
+    ["monster_barney"] = 2,
+
+    ["npc_fastzombie"] = 3,
+    ["npc_headcrab"] = 3,
+    ["npc_headcrab_black"] = 3,
+    ["npc_headcrab_fast"] = 3,
+    ["npc_antlion"] = 3,
+    ["npc_antlionguard"] = 3,
+    ["npc_zombie"] = 3,
+    ["npc_zombie_torso"] = 3,
+    ["npc_poisonzombie"] = 3,
+    ["monster_alien_grunt"] = 3,
+    ["monster_alien_slave"] = 3,
+    ["monster_gargantua"] = 3,
+    ["monster_bullchicken"] = 3,
+    ["monster_headcrab"] = 3,
+    ["monster_babycrab"] = 3,
+    ["monster_zombie"] = 3,
+    ["monster_houndeye"] = 3,
+    ["monster_nihilanth"] = 3,
+    ["monster_bigmomma"] = 3,
+    ["monster_babycrab"] = 3,
+}
+
 function simfphys.LFS:GetNPCRelationship( npc_class )
-    local Teams = {
-        ["npc_breen"] = 1,
-        ["npc_combine_s"] = 1,
-        ["npc_combinedropship"] = 1,
-        ["npc_combinegunship"] = 1,
-        ["npc_crabsynth"] = 1,
-        ["npc_cscanner"] = 1,
-        ["npc_helicopter"] = 1,
-        ["npc_manhack"] = 1,
-        ["npc_metropolice"] = 1,
-        ["npc_mortarsynth"] = 1,
-        ["npc_sniper"] = 1,
-        ["npc_stalker"] = 1,
-        ["npc_strider"] = 1,
-        ["monster_human_grunt"] = 1,
-        ["monster_human_assassin"] = 1,
-        ["monster_sentry"] = 1,
-
-        ["npc_kleiner"] = 2,
-        ["npc_monk"] = 2,
-        ["npc_mossman"] = 2,
-        ["npc_vortigaunt"] = 2,
-        ["npc_alyx"] = 2,
-        ["npc_barney"] = 2,
-        ["npc_citizen"] = 2,
-        ["npc_dog"] = 2,
-        ["npc_eli"] = 2,
-        ["monster_scientist"] = 2,
-        ["monster_barney"] = 2,
-
-        ["npc_fastzombie"] = 3,
-        ["npc_headcrab"] = 3,
-        ["npc_headcrab_black"] = 3,
-        ["npc_headcrab_fast"] = 3,
-        ["npc_antlion"] = 3,
-        ["npc_antlionguard"] = 3,
-        ["npc_zombie"] = 3,
-        ["npc_zombie_torso"] = 3,
-        ["npc_poisonzombie"] = 3,
-        ["monster_alien_grunt"] = 3,
-        ["monster_alien_slave"] = 3,
-        ["monster_gargantua"] = 3,
-        ["monster_bullchicken"] = 3,
-        ["monster_headcrab"] = 3,
-        ["monster_babycrab"] = 3,
-        ["monster_zombie"] = 3,
-        ["monster_houndeye"] = 3,
-        ["monster_nihilanth"] = 3,
-        ["monster_bigmomma"] = 3,
-        ["monster_babycrab"] = 3,
-    }
-    return Teams[npc_class] or "0"
+    return Teams[ npc_class ] or 0
 end
 
+local PLAYER_GetVehicle = meta.GetVehicle
 function meta:lfsGetPlane()
-    if not self:InVehicle() then return NULL end
-
-    local Pod = self:GetVehicle()
-
-    if not IsValid( Pod ) then return NULL end
+    local Pod = PLAYER_GetVehicle( self )
+    if not ENTITY_IsValid( Pod ) then return NULL end
 
     if Pod.LFSchecked then
-
         return Pod.LFSBaseEnt
-
     else
         local Parent = Pod:GetParent()
-
-        if not IsValid( Parent ) then return NULL end
+        if not ENTITY_IsValid( Parent ) then return NULL end
 
         if not Parent.LFS then return NULL end
 
@@ -262,11 +250,7 @@ function meta:lfsBuildControls()
 end
 
 function meta:lfsGetControls()
-    if not istable( self.LFS_BINDS ) then
-        self:lfsBuildControls()
-    end
-
-    return self.LFS_BINDS
+    return self.LFS_BINDS or self:lfsBuildControls()
 end
 
 local IS_MOUSE_ENUM = {

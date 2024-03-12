@@ -406,37 +406,36 @@ if SERVER then
     end )
 
     hook.Add( "CanExitVehicle", "!!!lfsCanExitVehicle", function( _, ply )
-        if IsValid( ply:lfsGetPlane() ) then return not ply.LFS_HIPSTER end
+        if ENTITY_IsValid( ply:lfsGetPlane() ) then return not ply.LFS_HIPSTER end
     end )
 
     hook.Add( "PlayerButtonUp", "!!!lfsButtonUp", function( ply, button )
         for _, LFS_BIND in pairs( ply:lfsGetControls() ) do
-            if LFS_BIND[button] then
-                ply:lfsSetInput( LFS_BIND[button], false )
+            local bind = LFS_BIND[ button ]
+            if bind then
+                ply:lfsSetInput( bind, false )
             end
         end
     end )
 
     hook.Add( "PlayerButtonDown", "!!!lfsButtonDown", function( ply, button )
         local vehicle = ply:lfsGetPlane()
+        local valid = ENTITY_IsValid( vehicle )
 
         for _, LFS_BIND in pairs( ply:lfsGetControls() ) do
-            if LFS_BIND[button] then
-                ply:lfsSetInput( LFS_BIND[button], true )
+            local bind = LFS_BIND[ button ]
+            if bind then
+                ply:lfsSetInput( bind, true )
 
-                if IsValid( vehicle ) then
-                    if ply.LFS_HIPSTER then
-                        if LFS_BIND[button] == "EXIT" then
-                            timer.Simple( 0, function()
-                                ply:ExitVehicle()
-                            end )
-                        end
-                    end
+                if valid and ply.LFS_HIPSTER and bind == "EXIT" then
+                    timer.Simple( 0, function()
+                        ply:ExitVehicle()
+                    end )
                 end
             end
         end
 
-        if not IsValid( vehicle ) then return end
+        if not valid then return end
 
         if button == KEY_1 then
             if ply == vehicle:GetDriver() then

@@ -16,7 +16,10 @@ local Materials = {
 	"particle/smokesprites_0015",
 	"particle/smokesprites_0016"
 }
+local MaterialCount = #Materials
 
+local math_floor = math.floor
+local math_Rand = math.Rand
 function EFFECT:Init( data )
 	local lPos = data:GetOrigin()
 	local lAng = data:GetAngles() - Angle(90,0,0)
@@ -31,7 +34,7 @@ function EFFECT:Init( data )
 		local emitter = ParticleEmitter( Pos, false )
 
 		if emitter then
-			local particle = emitter:Add( Materials[ math.Round( math.Rand( 1, #Materials ), 0 ) ], Pos )
+			local particle = emitter:Add( Materials[ math_floor( math_Rand( 1, #Materials ) + .5 ) ], Pos )
 			local cInt = math.Clamp(100 - 40 * Size,0,255)
 			local rand = Vector( math.random(-1,1), math.random(-1,1), math.random(-1,1) ) * 0.25
 

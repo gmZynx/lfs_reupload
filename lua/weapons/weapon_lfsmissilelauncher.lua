@@ -44,10 +44,29 @@ end
 
 local lfsRpgLockTime
 local lfsRpgLockAngle
-local lfsRpgMaxLockRange = CreateConVar( "lfs_rpgmaxrange", 60000, { FCVAR_ARCHIVE, FCVAR_REPLICATED } )
 if SERVER then
 	lfsRpgLockTime = CreateConVar( "lfs_rpglocktime", 3, FCVAR_ARCHIVE )
-	lfsRpgLockAngle = CreateConVar( "lfs_rpglockangle", 15, FCVAR_ARCHIVE )
+	lfsRpgLockAngle = CreateConVar( "lfs_rpglockangle", 7, FCVAR_ARCHIVE )
+
+	local maxRange = CreateConVar( "lfs_rpgmaxrange", 60000, { FCVAR_ARCHIVE } ):GetInt()
+	SetGlobalInt( "lfs_rpgmaxrange", maxRange )
+
+	cvars.AddChangeCallback( "lfs_rpgmaxrange", function( _, _, value )
+		SetGlobalInt( "lfs_rpgmaxrange", tonumber( value ) )
+		maxRange = tonumber( value )
+	end, "LFS_MissileLauncher_Range" )
+
+	local function setFogRange()
+		local fogController = ents.FindByClass( "env_fog_controller" )[1]
+		if not IsValid( fogController ) then return end
+
+		local fogRange = fogController:GetKeyValues().farz
+		if fogRange == -1 then return end
+		SetGlobalInt( "lfs_rpgmaxrange", math.min( maxRange, fogRange ) )
+	end
+
+	hook.Add( "InitPostEntity", "LFS_MissileLauncher_Range", setFogRange )
+	setFogRange() -- Autorefresh
 end
 
 function SWEP:Think()
@@ -129,7 +148,7 @@ function SWEP:Think()
 		local AimForward = Owner:GetAimVector()
 		local startpos = Owner:GetShootPos()
 
-		local maxDist = lfsRpgMaxLockRange:GetInt()
+		local maxDist = GetGlobalInt( "lfs_rpgmaxrange" )
 		local lockOnAng = lfsRpgLockAngle:GetInt()
 
 		local Vehicles = {}
@@ -211,8 +230,7 @@ end
 
 function SWEP:PrimaryAttack()
 
-	if self:Clip1() <= 0 then
-		if not SERVER then return end
+	if SERVER and self:Clip1() <= 0 then
 		self:Reload()
 	end
 
@@ -245,6 +263,10 @@ function SWEP:PrimaryAttack()
 
 	if IsValid( LockOnTarget ) and self:GetIsLocked() then
 		ent:SetLockOn( LockOnTarget )
+	end
+
+	if SERVER and self:Clip1() <= 0 then
+		self:Reload()
 	end
 end
 
@@ -315,7 +337,7 @@ local function PaintPlaneIdentifier( ply )
 	local MyPos = ply:GetPos()
 	local MyTeam = ply:lfsGetAITeam()
 	local startpos = ply:GetShootPos()
-	local maxDist = lfsRpgMaxLockRange:GetInt()
+	local maxDist = GetGlobalInt( "lfs_rpgmaxrange" )
 
 	for _, vehicle in pairs( AllPlanes ) do
 		if not IsValid( vehicle ) then continue end

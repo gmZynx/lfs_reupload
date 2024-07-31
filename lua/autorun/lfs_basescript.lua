@@ -411,7 +411,11 @@ if SERVER then
     end )
 
     hook.Add( "CanExitVehicle", "!!!lfsCanExitVehicle", function( _, ply )
-        if ENTITY_IsValid( ply:lfsGetPlane() ) then return not ply.LFS_HIPSTER end
+        if not ENTITY_IsValid( ply:lfsGetPlane() ) then return end
+
+        if ply.LFS_HIPSTER then
+            return false
+        end
     end )
 
     hook.Add( "PlayerButtonUp", "!!!lfsButtonUp", function( ply, button )
@@ -433,9 +437,11 @@ if SERVER then
                 ply:lfsSetInput( bind, true )
 
                 if valid and ply.LFS_HIPSTER and bind == "EXIT" then
-                    timer.Simple( 0, function()
-                        ply:ExitVehicle()
-                    end )
+                    if hook.Run( "LFS.CanPlayerLeaveVehicle", vehicle, ply ) ~= false then
+                        timer.Simple( 0, function()
+                            ply:ExitVehicle()
+                        end)
+                    end
                 end
             end
         end
@@ -1022,6 +1028,7 @@ if CLIENT then
         local yPos = Y - (SeatCount + 1) * 30 - 10
 
         for _, Pod in pairs( pSeats ) do
+            if not IsValid( Pod ) then continue end
             local I = Pod:GetNWInt( "pPodIndex", -1 )
             if I >= 0 then
                 if I == MySeat then
